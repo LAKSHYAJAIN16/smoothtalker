@@ -42,4 +42,4 @@ model.fit(X_train, y_train,
           batch_size=500,
           epochs=100,
           verbose=1,
-          validation_data=(X_test, y_test))
+          validation_data=(X_test, y_test)) 

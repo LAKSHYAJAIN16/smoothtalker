@@ -10,93 +10,83 @@
         }
     },
     {
-        "text": "This is really awesome!",
+        "text": "you look good",
         "output": {
-            "fzness": 0.78,
-            "flness": 0.2,
-            "intrest": 0.7,
-            "confidence": 0.3,
-            "coolness": 0.72
+            "fzness": 0.3,
+            "flness": 0.7,
+            "intrest": 1,
+            "confidence": 1,
+            "coolness": 0.5
         }
     },
     {
-        "text": "I'm going to the party tommorow. Want to  come?",
-        "output": {
-            "fzness": 0.01,
-            "flness": 0.9,
-            "intrest": 0.9,
-            "confidence": 0.9,
-            "coolness": 0.9
-        }
-    },
-    {
-        "text": "yo u suck",
-        "output": {
-            "fzness": 1,
-            "flness": 0,
-            "intrest": 0,
-            "confidence": 0,
-            "coolness": 0
-        }
-    },
-    {
-        "text": "This is awesome really I love this",
-        "output": {
-            "fzness": 1,
-            "flness": 0,
-            "intrest": 0,
-            "confidence": 0,
-            "coolness": 0
-        }
-    },
-    {
-        "text": "i should kill you",
+        "text": "that's what she said",
         "output": {
             "fzness": 0.2,
             "flness": 1,
             "intrest": 1,
-            "confidence": 1,
+            "confidence": 0.7,
             "coolness": 1
         }
     },
     {
-        "text": "This is awesome really I love this",
+        "text": "that's what she said",
         "output": {
-            "fzness": 1,
-            "flness": 0,
-            "intrest": 0,
-            "confidence": 0,
-            "coolness": 0
+            "fzness": 0.2,
+            "flness": 1,
+            "intrest": 1,
+            "confidence": 0.7,
+            "coolness": 1
         }
     },
     {
-        "text": "Suit yourself",
+        "text": "I ought to complain to Spotify for you not being named this week's hottest single",
         "output": {
             "fzness": 0,
             "flness": 1,
             "intrest": 1,
             "confidence": 1,
-            "coolness": 1
+            "coolness": 0.5
         }
     },
     {
-        "text": "ikr",
+        "text": "I never believed in love at first sight, but that was before I saw you.",
         "output": {
-            "fzness": 0.5,
-            "flness": 0.5,
-            "intrest": 0.5,
-            "confidence": 0.5,
-            "coolness": 1
-        }
-    },
-    {
-        "text": "wow you have more",
-        "output": {
-            "fzness": 0.5,
-            "flness": 0.5,
+            "fzness": 0,
+            "flness": 1,
             "intrest": 1,
             "confidence": 1,
             "coolness": 0.5
+        }
+    },
+    {
+        "text": "I think there's something wrong with my phone. Could you try calling it to see if it works?",
+        "output": {
+            "fzness": 0,
+            "flness": 1,
+            "intrest": 1,
+            "confidence": 1,
+            "coolness": 0.5
+        }
+    },
+    {
+        "text": "yeah man ikr",
+        "output": {
+            "fzness": 0.5,
+            "flness": 0.2,
+            "intrest": 0.5,
+            "confidence": 0.7,
+            "coolness": 0.5
+        }
+    },
+    {
+        "text": "Me smort",
+        "output": {
+            "fzness": 0.2,
+            "flness": 0.7,
+            "intrest": 0.7,
+            "confidence": 0.7,
+            "coolness": 0.7
         }
     }
 ]
