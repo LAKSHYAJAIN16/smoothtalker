@@ -1,0 +1,102 @@
+[
+    {
+        "text": "omg ikr",
+        "output": {
+            "fzness": 0.65,
+            "flness": 0.62,
+            "intrest": 0.1,
+            "confidence": 0.7,
+            "coolness": 0.9
+        }
+    },
+    {
+        "text": "This is really awesome!",
+        "output": {
+            "fzness": 0.78,
+            "flness": 0.2,
+            "intrest": 0.7,
+            "confidence": 0.3,
+            "coolness": 0.72
+        }
+    },
+    {
+        "text": "I'm going to the party tommorow. Want to  come?",
+        "output": {
+            "fzness": 0.01,
+            "flness": 0.9,
+            "intrest": 0.9,
+            "confidence": 0.9,
+            "coolness": 0.9
+        }
+    },
+    {
+        "text": "yo u suck",
+        "output": {
+            "fzness": 1,
+            "flness": 0,
+            "intrest": 0,
+            "confidence": 0,
+            "coolness": 0
+        }
+    },
+    {
+        "text": "This is awesome really I love this",
+        "output": {
+            "fzness": 1,
+            "flness": 0,
+            "intrest": 0,
+            "confidence": 0,
+            "coolness": 0
+        }
+    },
+    {
+        "text": "i should kill you",
+        "output": {
+            "fzness": 0.2,
+            "flness": 1,
+            "intrest": 1,
+            "confidence": 1,
+            "coolness": 1
+        }
+    },
+    {
+        "text": "This is awesome really I love this",
+        "output": {
+            "fzness": 1,
+            "flness": 0,
+            "intrest": 0,
+            "confidence": 0,
+            "coolness": 0
+        }
+    },
+    {
+        "text": "Suit yourself",
+        "output": {
+            "fzness": 0,
+            "flness": 1,
+            "intrest": 1,
+            "confidence": 1,
+            "coolness": 1
+        }
+    },
+    {
+        "text": "ikr",
+        "output": {
+            "fzness": 0.5,
+            "flness": 0.5,
+            "intrest": 0.5,
+            "confidence": 0.5,
+            "coolness": 1
+        }
+    },
+    {
+        "text": "wow you have more",
+        "output": {
+            "fzness": 0.5,
+            "flness": 0.5,
+            "intrest": 1,
+            "confidence": 1,
+            "coolness": 0.5
+        }
+    }
+]

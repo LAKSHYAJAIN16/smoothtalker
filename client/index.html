@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Smooth Talker</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/main.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="heading">Smooth Talker</h1>
+      <p class="desc">it's ok man, we gotchu</p>
+
+      <div id="main">
+        <div class="n-flex" style="flex-direction: column">
+          <button
+            class="button"
+            onclick="switchUI('decode')"
+            id="to-decode-btn"
+          >
+            Decode Message by Girl
+          </button>
+        </div>
+      </div>
+
+      <div id="decode" style="display: none">
+        <div class="n-flex" style="flex-direction: column">
+          <input type="text" class="d-input" id="decodeInput"/>
+          <button class="button" onclick="decode()" id="decode-fn">Decode Message</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

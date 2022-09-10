@@ -1,0 +1,11 @@
+{
+    "name": "Smoothtalker",
+    "version": "1.0.0",
+    "description": "Talking has never been easier",
+    "manifest_version": 3,
+    "author": "Lakshya Jain",
+    "action": {
+        "default_popup": "index.html",
+        "default_title": "Smoothtalker"
+    }
+}
