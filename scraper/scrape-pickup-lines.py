@@ -1,12 +1,14 @@
+import json
 import requests
 from bs4 import BeautifulSoup
 
 # Total Pages
-PAGES = 20
+PAGES = 48
 links = []
+lines = []
 
 # Scrape Base Links
-for i in range(1, PAGES):
+for i in range(25, PAGES):
     # Scrape
     URL = "https://pickupline.net/page/" + str(i) + "?s=" 
     page = requests.get(URL)
@@ -19,14 +21,16 @@ for i in range(1, PAGES):
     children = content.findChildren("article", recursive=False)
     for child in children:
         # Get href
-        a = child.findChildren("div", recursive=False)[0].findChildren("div", recursive=False)[
-            0].findChildren("figure", recursive=False)[0].findChildren("a", recursive=False)[0]
+        d = child.findChild("div", recursive=False)
+        dd = d.findChild("div", recursive=False)
+        figure = dd.findChild("figure", recursive=False)
+        a = figure.findChild("a", recursive=False)
         href = a.get("href")
         links.append(href)
         # print(href)
 
-    # print("\n")
-    # print(str(i) + " done")
+    print("\n")
+    print(str(i) + " done")
 
 # Scrape Actual Lines
 for link in links:
@@ -38,4 +42,21 @@ for link in links:
     elements = soup.findAll('tr')
     for row in elements:
         td = row.findChild("td")
-        print(td)
+        txt = str(td)
+        buf = ""
+        started = False
+        for char in txt:
+            if char == ">":
+                started = True
+                continue
+
+            if char == "<":
+                started = False
+                continue
+
+            elif started == True:
+                buf += char
+        lines.append(buf)
+    print("Done : ", link)
+linesJSON = json.dump(lines, open("lines2.json", "w+"))
+linksJSON = json.dump(links, open("links2.json", "w+"))
