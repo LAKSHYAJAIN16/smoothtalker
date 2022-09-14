@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Collection</title>
+    <script>
+      let lines = [];
+      const init = () => {
+        fetch(
+          "https://raw.githubusercontent.com/LAKSHYAJAIN16/smoothtalker/main/scraper/final_lines.json"
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            lines = data;
+
+            // Display Random Line
+            const randomLine = data[Math.floor(Math.random() * data.length)];
+            displayLine(randomLine);
+          });
+      };
+
+      const displayLine = (line) => {
+        // Variables
+        const text = document.getElementById("text");
+        text.innerText = line;
+      };
+
+      const next = () => {
+        console.log("hello!");
+        // Display Random Line
+        const randomLine = lines[Math.floor(Math.random() * lines.length)];
+        displayLine(randomLine);
+      };
+
+      init();
+    </script>
+
+    <style>
+      /* Basic Text Styles */
+      .text {
+        text-align: center;
+      }
+
+      .slidecontainer {
+        width: 35%; /* Width of the outside container */
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* The slider itself */
+      .slider {
+        -webkit-appearance: none; /* Override default CSS styles */
+        appearance: none;
+        width: 100%; /* Full-width */
+        height: 25px; /* Specified height */
+        background: #d3d3d3; /* Grey background */
+        outline: none; /* Remove outline */
+        opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+        -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+        transition: opacity 0.2s;
+      }
+
+      /* Mouse-over effects */
+      .slider:hover {
+        opacity: 1; /* Fully shown on mouse-over */
+      }
+
+      /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+        width: 25px; /* Set a specific slider handle width */
+        height: 25px; /* Slider handle height */
+        background: #04aa36; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+      }
+
+      .slider::-moz-range-thumb {
+        width: 25px; /* Set a specific slider handle width */
+        height: 25px; /* Slider handle height */
+        background: #04aa6d; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+      }
+
+      /* Next Button */
+      .button {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30px;
+        width: 100px;
+        height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="text" class="text"></h1>
+
+    <div class="slidecontainer">
+      <p>Corniness</p>
+      <input type="range" min="1" max="100" class="slider" id="myRange" />
+      <br />
+
+      <p>"Out there"</p>
+      <input type="range" min="1" max="100" class="slider" id="myRange" />
+      <br />
+
+      <p>Weird</p>
+      <input type="range" min="1" max="100" class="slider" id="myRange" />
+      <br />
+
+      <p>Actually Good</p>
+      <input type="range" min="1" max="100" class="slider" id="myRange" />
+      <br />
+
+      <button class="button" id="button" onclick="next()">Next</button>
+    </div>
+  </body>
+</html>
