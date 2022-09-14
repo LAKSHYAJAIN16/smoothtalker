@@ -4,11 +4,12 @@ from bs4 import BeautifulSoup
 
 # Total Pages
 PAGES = 48
+START_PAGE = 25
 links = []
 lines = []
 
 # Scrape Base Links
-for i in range(25, PAGES):
+for i in range(START_PAGE, PAGES):
     # Scrape
     URL = "https://pickupline.net/page/" + str(i) + "?s=" 
     page = requests.get(URL)
@@ -58,5 +59,6 @@ for link in links:
                 buf += char
         lines.append(buf)
     print("Done : ", link)
+    
 linesJSON = json.dump(lines, open("lines2.json", "w+"))
 linksJSON = json.dump(links, open("links2.json", "w+"))
