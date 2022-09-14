@@ -5,8 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Data Collection</title>
+
+    <!-- AXIOS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"
+      integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- MAIN JS -->
     <script>
+      // Lines
       let lines = [];
+      let curLine = "";
+      let curIndex = 0;
+
+      // Init Function
       const init = () => {
         fetch(
           "https://raw.githubusercontent.com/LAKSHYAJAIN16/smoothtalker/main/scraper/final_lines.json"
@@ -16,27 +31,65 @@
             lines = data;
 
             // Display Random Line
-            const randomLine = data[Math.floor(Math.random() * data.length)];
+            const rn = Math.floor(Math.random() * data.length);
+            const randomLine = data[rn];
+            curIndex = rn;
+            curLine = randomLine;
             displayLine(randomLine);
           });
       };
 
+      // Display Line
       const displayLine = (line) => {
         // Variables
         const text = document.getElementById("text");
         text.innerText = line;
       };
 
-      const next = () => {
-        console.log("hello!");
-        // Display Random Line
-        const randomLine = lines[Math.floor(Math.random() * lines.length)];
+      // Next Callback
+      const next = async() => {
+        // Get curLine and curIndex before we change them
+        const prevIndex = curIndex;
+        const prevLine = curLine;
+
+        //Display Random Line
+        const rn = Math.floor(Math.random() * lines.length);
+        const randomLine = lines[rn];
+        curIndex = rn;
+        curLine = randomLine;
         displayLine(randomLine);
+
+        // Get Input Values
+        const corniness = document.getElementById("corniness");
+        const outthere = document.getElementById("out-there");
+        const weird = document.getElementById("weird");
+        const good = document.getElementById("actually-good");
+
+        // Assemble Data
+        const values = {
+          corn: corniness.value / 100,
+          outthere: outthere.value / 100,
+          weird: weird.value / 100,
+          good: good.value / 100,
+        };
+
+        // Assemble final payload
+        const payload = {
+          line: prevLine,
+          id: prevIndex,
+          scores: [values],
+        };
+        console.log(payload);
+
+        // Send request to api
+        const res = await axios.post("https://itsalright.in/api/deployed-helpers/pickup-lines", payload);
+        console.log(res);
       };
 
       init();
     </script>
 
+    <!-- MAIN STYLES -->
     <style>
       /* Basic Text Styles */
       .text {
@@ -99,19 +152,19 @@
 
     <div class="slidecontainer">
       <p>Corniness</p>
-      <input type="range" min="1" max="100" class="slider" id="myRange" />
+      <input type="range" min="1" max="100" class="slider" id="corniness" />
       <br />
 
       <p>"Out there"</p>
-      <input type="range" min="1" max="100" class="slider" id="myRange" />
+      <input type="range" min="1" max="100" class="slider" id="out-there" />
       <br />
 
       <p>Weird</p>
-      <input type="range" min="1" max="100" class="slider" id="myRange" />
+      <input type="range" min="1" max="100" class="slider" id="weird" />
       <br />
 
       <p>Actually Good</p>
-      <input type="range" min="1" max="100" class="slider" id="myRange" />
+      <input type="range" min="1" max="100" class="slider" id="actually-good" />
       <br />
 
       <button class="button" id="button" onclick="next()">Next</button>
