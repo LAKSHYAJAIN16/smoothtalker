@@ -20,13 +20,35 @@
           >
             Decode Message by Girl
           </button>
+
+          <br />
+          <button
+            class="button"
+            onclick="switchUI('pickup-lines')"
+            id="to-pickup-btn"
+          >
+            Pickup Line Archive
+          </button>
         </div>
       </div>
 
       <div id="decode" style="display: none">
         <div class="n-flex" style="flex-direction: column">
-          <input type="text" class="d-input" id="decodeInput"/>
-          <button class="button" onclick="decode()" id="decode-fn">Decode Message</button>
+          <input type="text" class="d-input" id="decodeInput" />
+          <button class="button" onclick="decode()" id="decode-fn">
+            Decode Message
+          </button>
+        </div>
+
+        <button class="button" onclick="decode()" id="decode-fn">Back</button>
+      </div>
+
+      <div id="pickup-lines" style="display: none">
+        <div class="n-flex" style="flex-direction: column">
+          <input type="text" class="d-input" id="decodeInput" />
+          <button class="button" onclick="decode()" id="decode-fn">
+            Generate Pickupline
+          </button>
         </div>
       </div>
     </div>

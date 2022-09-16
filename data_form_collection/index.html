@@ -14,6 +14,53 @@
       referrerpolicy="no-referrer"
     ></script>
 
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+      import {
+        getFirestore,
+        updateDoc,
+        doc,
+        getDoc,
+        setDoc,
+      } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyDLlpqRWjsd8WkBq9Y-A-tlQfIXwE_Wh60",
+        authDomain: "itsalright-e6062.firebaseapp.com",
+        projectId: "itsalright-e6062",
+        storageBucket: "itsalright-e6062.appspot.com",
+        messagingSenderId: "451606941252",
+        appId: "1:451606941252:web:fae20fb51769229e683611",
+        measurementId: "G-4421CQ6M2N",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(firebaseConfig);
+
+      async function look(data) {
+        const doc2 = await getDoc(doc(db, "pickup-lines", data.id));
+        if (doc2.exists()) {
+          const data2 = doc2.data();
+          const scores = data2.scores;
+          const newScores = scores.concat(data.scores);
+          await updateDoc(doc(db, "pickup-lines", data.id), {
+            scores: newScores,
+          });
+          console.log("he");
+        } else {
+          await setDoc(doc(db, "pickup-lines", data.id), data);
+          console.log("y");
+        }
+      }
+      console.log(analytics);
+    </script>
+
     <!-- MAIN JS -->
     <script>
       // Lines
@@ -24,7 +71,7 @@
       // Init Function
       const init = () => {
         fetch(
-          "https://raw.githubusercontent.com/LAKSHYAJAIN16/smoothtalker/main/scraper/final_lines.json"
+          "https://raw.githubusercontent.com/LAKSHYAJAIN16/smoothtalker/main/data/final_lines.json"
         )
           .then((response) => response.json())
           .then((data) => {
@@ -47,7 +94,7 @@
       };
 
       // Next Callback
-      const next = async() => {
+      const next = async () => {
         // Get curLine and curIndex before we change them
         const prevIndex = curIndex;
         const prevLine = curLine;
@@ -82,8 +129,12 @@
         console.log(payload);
 
         // Send request to api
-        const res = await axios.post("https://itsalright.in/api/deployed-helpers/pickup-lines", payload);
+        const res = await axios.post(
+          "https://itsalright-prod-2.vercel.app/api/deployed-helpers/pickup-lines",
+          payload
+        );
         console.log(res);
+        // await look(payload);
       };
 
       init();

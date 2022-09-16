@@ -1,8 +1,8 @@
 import json
 
 
-MERGE_LINES = ["scraper\lines.json", "scraper\lines2.json"]
-MERGE_LINKS = ["scraper\links.json", "scraper\links2.json"]
+MERGE_LINES = ["lines.json", "lines2.json"]
+MERGE_LINKS = ["links.json", "links2.json"]
 
 lines = []
 for i in MERGE_LINES:
