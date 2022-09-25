@@ -16,27 +16,31 @@ output = []
 PUNCTUATION = ["?", ",", "!", "_", "."]
 
 # Load Data
-data = json.loads(open('data\data.json').read())
+data = json.load(open("data\data.json", encoding="utf8"))
 
 # Loop through each data object
 for i in data:
-    # Remove Stopwords
-    text = nltk.word_tokenize(i["text"].lower())
-    stop_words = set(stopwords.words('english'))
-    text = [word for word in text if word.isalpha() and not word in stop_words]
-    finText = ' '.join(text)
+    try:
 
-    # Add to Corpus & Output
-    corpus.append(finText)
+        # Remove Stopwords
+        text = nltk.word_tokenize(i["line"].lower())
+        stop_words = set(stopwords.words('english'))
+        text = [word for word in text if word.isalpha()
+                and not word in stop_words]
+        finText = ' '.join(text)
 
-    # Fit output data
-    outbuf = []
-    outbuf.append(i["output"]["fzness"])
-    outbuf.append(i["output"]["flness"])
-    outbuf.append(i["output"]["intrest"])
-    outbuf.append(i["output"]["confidence"])
-    outbuf.append(i["output"]["coolness"])
-    output.append(np.array(outbuf))
+        # Add to Corpus & Output
+        corpus.append(finText)
+
+        # Fit output data
+        outbuf = []
+        outbuf.append(i["scores"][0]["outthere"])
+        outbuf.append(i["scores"][0]["corn"])
+        outbuf.append(i["scores"][0]["weird"])
+        outbuf.append(i["scores"][0]["good"])
+        output.append(np.array(outbuf))
+    except:
+        print("One fault")
 
 # Create Tokenizer
 tokenizer = Tokenizer()
