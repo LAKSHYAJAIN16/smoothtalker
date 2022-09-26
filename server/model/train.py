@@ -18,7 +18,7 @@ with open('data/pickle/yTrain.pkl', 'rb') as f:
 
 # Get Train & Test
 X_train, X_test, y_train, y_test = train_test_split(x_data, y_data,
-                                                    test_size=0.5,
+                                                    test_size=0.25,
                                                     shuffle=True)
 
 # Define N
@@ -27,7 +27,7 @@ NY = len(y_data[0])
 print(x_data)
 
 # Checkpoint
-checkpoint1 = ModelCheckpoint("best_model1.hdf5", monitor='val_accuracy', verbose=1,
+checkpoint1 = ModelCheckpoint("best_model.hdf5", monitor='val_accuracy', verbose=1,
                               save_best_only=True, mode='auto', period=1, save_weights_only=False)
 
 # Create Model
