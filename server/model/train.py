@@ -36,6 +36,8 @@ model.add(Embedding(5000, 40))
 model.add(Dense(128, activation="relu"))
 model.add(LSTM(64, dropout=0.5))
 model.add(Dense(32, activation="relu"))
+model.add(Dense(16, activation="relu"))
+model.add(Dense(8, activation="relu"))
 model.add(Dense(4, activation="relu"))
 model.compile(optimizer='rmsprop',
               loss='binary_crossentropy', metrics=['accuracy'])
