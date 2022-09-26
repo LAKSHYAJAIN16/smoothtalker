@@ -43,7 +43,7 @@ for i in data:
         print("One fault")
 
 # Create Tokenizer
-tokenizer = Tokenizer()
+tokenizer = Tokenizer(num_words=5000)
 tokenizer.fit_on_texts(corpus)
 sequences = tokenizer.texts_to_sequences(corpus)
 padded_sequences = pad_sequences(sequences, maxlen=4)

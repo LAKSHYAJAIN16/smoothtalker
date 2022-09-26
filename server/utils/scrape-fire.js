@@ -44,5 +44,6 @@ const test = () => {
   const js = JSON.parse(text);
   console.log(js);
 };
-test();
-// fn();
+
+// test();
+fn();
