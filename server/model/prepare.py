@@ -16,7 +16,7 @@ output = []
 PUNCTUATION = ["?", ",", "!", "_", "."]
 
 # Load Data
-data = json.load(open("data\data.json", encoding="utf8"))
+data = json.load(open("data\data2.json", encoding="utf8"))
 
 # Loop through each data object
 for i in data:

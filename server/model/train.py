@@ -18,7 +18,7 @@ with open('data/pickle/yTrain.pkl', 'rb') as f:
 
 # Get Train & Test
 X_train, X_test, y_train, y_test = train_test_split(x_data, y_data,
-                                                    test_size=0.25,
+                                                    test_size=0.1,
                                                     shuffle=True)
 
 # Define N
@@ -33,17 +33,15 @@ checkpoint1 = ModelCheckpoint("best_model.hdf5", monitor='val_accuracy', verbose
 # Create Model
 model = Sequential()
 model.add(Embedding(5000, 40))
+model.add(SimpleRNN(256, activation="relu"))
 model.add(Dense(128, activation="relu"))
-model.add(LSTM(64, dropout=0.5))
 model.add(Dense(32, activation="relu"))
-model.add(Dense(16, activation="relu"))
-model.add(Dense(8, activation="relu"))
 model.add(Dense(4, activation="relu"))
 model.compile(optimizer='rmsprop',
               loss='binary_crossentropy', metrics=['accuracy'])
 
 hist = model.fit(X_train, y_train,
-                 epochs=300,
+                 epochs=100,
                  verbose=1,
                  validation_data=(X_test, y_test),
                  callbacks=[checkpoint1]
