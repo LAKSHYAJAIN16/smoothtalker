@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/style.css" />
     <script src="/main.js"></script>
   </head>
+  
   <body>
     <div class="main">
       <h1 class="heading">Smooth Talker</h1>
@@ -29,6 +30,15 @@
           >
             Pickup Line Archive
           </button>
+
+          <br />
+          <button
+            class="button"
+            id="to-mws-btn"
+            onclick="switchUI('pickup-lines')"
+          >
+            Monitor Whatsapp
+          </button>
         </div>
       </div>
 
@@ -49,6 +59,12 @@
           <button class="button" onclick="decode()" id="decode-fn">
             Generate Pickupline
           </button>
+        </div>
+      </div>
+
+      <div id="mws" style="display: none">
+        <div class="n-flex" style="flex-direction: column">
+          <p class="mws">Monitoring Whatsapp..</p>
         </div>
       </div>
     </div>

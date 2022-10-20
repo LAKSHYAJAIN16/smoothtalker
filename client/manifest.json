@@ -7,5 +7,13 @@
     "action": {
         "default_popup": "index.html",
         "default_title": "Smoothtalker"
-    }
+    },
+    "permissions": [
+        "tabs",
+        "<all_urls>",
+        "scripting",
+        "http://*/",
+        "https://*/"
+    ],
+    "host_permissions": ["https://*/*"]
 }
