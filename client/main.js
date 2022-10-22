@@ -24,212 +24,184 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function monitorWhatsapp() {
-    let ableScroll = false;
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       let url = new URL(tabs[0].url);
 
       if (url.host !== "web.whatsapp.com") {
         alert("You are not on WhatsApp");
       } else {
-        //Inject script to listen for key inputs (mostly for the scroll)
-        chrome.scripting.executeScript({
-          target: { tabId: tabs[0].id, allFrames: true },
-          function: keyInputs,
-        });
+        //We're on whatsapp boiz!
       }
-    });
 
-    let iters = 0;
-    chrome.runtime.onMessage.addListener(function (request, sender) {
-      if (request.action == "getSource") {
-        // this.pageSource = request.source;
-        const html = request.source;
+      let iters = 0;
+      chrome.runtime.onMessage.addListener(function (request, sender) {
+        if (request.action == "getSource") {
+          // this.pageSource = request.source;
+          const html = request.source;
 
-        //Update Iters
-        iters += 1;
+          //Update Iters
+          iters += 1;
 
-        //Write to Output
-        document.getElementById("mws-iters").innerText = `Iters : ${iters}`;
-        document.getElementById("mws-content").innerText = html;
+          //Write to Output
+          document.getElementById("mws-iters").innerText = `Iters : ${iters}`;
+          document.getElementById("mws-content").innerText = html;
 
-        //Save to localStorage
-        localStorage.setItem("mws", html);
-      }
-    });
+          //Save to localStorage
+          localStorage.setItem("mws", html);
+        }
+      });
 
-    function injection() {
-      //Get Title of Conversation
-      const convoTitle = document.querySelector("._21nHd").innerText;
+      function injection() {
+        //Get Title of Conversation
+        const convoTitle = document.querySelector("._21nHd").innerText;
 
-      //Get All Messages
-      const msgs = document.getElementsByClassName("_1Gy50");
-      const actMsgs = [];
-      let lastName = "";
-      for (let i = 0; i < msgs.length; i++) {
-        //Get Actual Message
-        const msg = msgs[i].firstChild.firstChild;
+        //Get All Messages
+        const msgs = document.getElementsByClassName("_1Gy50");
+        const actMsgs = [];
+        let lastName = "";
+        for (let i = 0; i < msgs.length; i++) {
+          //Get Actual Message
+          const msg = msgs[i].firstChild.firstChild;
 
-        try {
-          //Get Name
-          const par = msgs[i].parentNode;
-          const supPar = par.parentNode;
-          const container = supPar.firstChild;
-          const nameElement = container.firstChild;
-          let name = nameElement.innerText || msg.innerText;
+          try {
+            //Get Name
+            const par = msgs[i].parentNode;
+            const supPar = par.parentNode;
+            const container = supPar.firstChild;
+            const nameElement = container.firstChild;
+            let name = nameElement.innerText || msg.innerText;
 
-          //Check if it is our message
-          const youContainer = supPar.parentNode;
-          const spans = youContainer.childNodes;
-          let isYou = false;
-          for (let i = 0; i < spans.length; i++) {
-            const element = spans[i];
-            // Check if it is a span
-            if (element.nodeName === "SPAN") {
-              const label = element.ariaLabel;
-              // console.log(label);
-              if (label === null || undefined) {
-                //Nothing. Standard Whatsapp
-                // console.log("Standard Whatsapp Detected");
-                continue;
-              } else {
-                //Sometimes the label might contain the convo name, for direct messages
-                if (label.includes(convoTitle)) {
-                  isYou = false;
+            //Check if it is our message
+            const youContainer = supPar.parentNode;
+            const spans = youContainer.childNodes;
+            let isYou = false;
+            for (let i = 0; i < spans.length; i++) {
+              const element = spans[i];
+              // Check if it is a span
+              if (element.nodeName === "SPAN") {
+                const label = element.ariaLabel;
+                // console.log(label);
+                if (label === null || undefined) {
+                  //Nothing. Standard Whatsapp
+                  // console.log("Standard Whatsapp Detected");
                   continue;
                 } else {
-                  // ABORT ABORT
-                  // console.log("MSG by User DETECTED");
-                  isYou = true;
-                  break;
+                  //Sometimes the label might contain the convo name, for direct messages
+                  if (label.includes(convoTitle)) {
+                    isYou = false;
+                    continue;
+                  } else {
+                    // ABORT ABORT
+                    // console.log("MSG by User DETECTED");
+                    isYou = true;
+                    break;
+                  }
                 }
               }
             }
-          }
 
-          if (isYou === true) {
-            console.log("Message by User detected");
-            // Abort!
-          } else if (isYou === false) {
-            //If the name and sender are equal, take the last valid name (WhatsApp :L)
-            if (name === msg.innerText) {
-              name = lastName;
-            } else if (name !== msg.innerText) {
-              lastName = name;
+            if (isYou === true) {
+              console.log("Message by User detected");
+              // Abort!
+            } else if (isYou === false) {
+              //If the name and sender are equal, take the last valid name (WhatsApp :L)
+              if (name === msg.innerText) {
+                name = lastName;
+              } else if (name !== msg.innerText) {
+                lastName = name;
+              }
+
+              //If the name is blank, we're in a direct chat, so the name will be the title
+              if (name === "") {
+                name = convoTitle;
+                lastName = convoTitle;
+              }
+
+              //Assign each message a unique id according to the message and name
+              actMsgs.push({ sender: name, msg: msg.innerText });
             }
-
-            //If the name is blank, we're in a direct chat, so the name will be the title
-            if (name === "") {
-              name = convoTitle;
-              lastName = convoTitle;
-            }
-
-            //Assign each message a unique id according to the message and name
-            actMsgs.push({ sender: name, msg: msg.innerText });
+          } catch (err) {
+            // Our Message, so don't do anything
+            // console.log(err);
           }
-        } catch (err) {
-          // Our Message, so don't do anything
-          // console.log(err);
         }
-      }
 
-      //Format
-      const output = {
-        title: convoTitle,
-        msgs: actMsgs,
-      };
+        //Format
+        const output = {
+          title: convoTitle,
+          msgs: actMsgs,
+        };
 
-      //Write to localStorage
-      const storage = JSON.parse(
-        localStorage.getItem("smoothtalker_buf") || "[]"
-      );
+        //Write to localStorage
+        const storage = JSON.parse(
+          localStorage.getItem("smoothtalker_buf") || "[]"
+        );
 
-      //Create LS Output
-      let ls_output = [];
-      let found = false;
-      for (let i = 0; i < storage.length; i++) {
-        let chat = storage[i];
-        let nChat = {};
-        let c_msgs = chat.msgs;
+        //Create LS Output
+        let ls_output = [];
+        let found = false;
+        for (let i = 0; i < storage.length; i++) {
+          let chat = storage[i];
+          let nChat = {};
+          let c_msgs = chat.msgs;
 
-        nChat.title = chat.title;
-        if (chat.title === output.title) {
-          console.log(`Updated Smoothtalker Data for ${convoTitle}`);
-          //Append
-          c_msgs = c_msgs.concat(output.msgs);
+          nChat.title = chat.title;
+          if (chat.title === output.title) {
+            console.log(`Updated Smoothtalker Data for ${convoTitle}`);
+            //Append
+            c_msgs = c_msgs.concat(output.msgs);
 
-          //Remove duplicates
-          let unique_msgs = [];
-          for (let i = 0; i < c_msgs.length; i++) {
-            const msg = c_msgs[i];
-            let is_unique = true;
-            for (let j = 0; j < unique_msgs.length; j++) {
-              const unique_msg = unique_msgs[j];
-              if (
-                msg.sender === unique_msg.sender &&
-                msg.msg === unique_msg.msg
-              ) {
-                is_unique = false;
+            //Remove duplicates
+            let unique_msgs = [];
+            for (let i = 0; i < c_msgs.length; i++) {
+              const msg = c_msgs[i];
+              let is_unique = true;
+              for (let j = 0; j < unique_msgs.length; j++) {
+                const unique_msg = unique_msgs[j];
+                if (
+                  msg.sender === unique_msg.sender &&
+                  msg.msg === unique_msg.msg
+                ) {
+                  is_unique = false;
+                }
+              }
+
+              if (is_unique === true) {
+                unique_msgs.push(msg);
               }
             }
+            c_msgs = unique_msgs;
 
-            if (is_unique === true) {
-              unique_msgs.push(msg);
-            }
+            //Set found to true
+            found = true;
           }
-          c_msgs = unique_msgs;
-
-          //Set found to true
-          found = true;
+          nChat.msgs = c_msgs;
+          ls_output.push(nChat);
         }
-        nChat.msgs = c_msgs;
-        ls_output.push(nChat);
+
+        //If our chat isn't a part, add it
+        if (found === false) {
+          ls_output.push(output);
+        }
+
+        localStorage.setItem("smoothtalker_buf", JSON.stringify(ls_output));
+
+        chrome.runtime.sendMessage({
+          action: "getSource",
+          source: JSON.stringify({
+            ls_output,
+          }),
+        });
+
+        //Repeat every 3 seconds for new messages
+        setTimeout(injection, 3000);
       }
 
-      //If our chat isn't a part, add it
-      if (found === false) {
-        ls_output.push(output);
-      }
-
-      localStorage.setItem("smoothtalker_buf", JSON.stringify(ls_output));
-
-      chrome.runtime.sendMessage({
-        action: "getSource",
-        source: JSON.stringify({
-          ls_output,
-        }),
-      });
-
-      //Repeat every 3 seconds for new messages
-      setTimeout(injection, 3000);
-    }
-
-    function keyInputs() {
-      function scroll() {
-        console.log("scrolling");
-        window.scrollBy(0, -10000);
-        if (ableScroll === true) {
-          setTimeout(scroll, 1000);
-        } else if (ableScroll === false) {
-          // End Loop
-        }
-      }
-      window.addEventListener("keydown", (e) => {
-        console.log(e.key);
-        if (e.key === "q") {
-          //Start Scroll
-          ableScroll = true;
-          scroll();
-        } else if (e.key === "z") {
-          //End Scroll
-          ableScroll = false;
-        }
-      });
-    }
-
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.scripting.executeScript({
-        target: { tabId: tabs[0].id, allFrames: true },
-        function: injection,
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id, allFrames: true },
+          function: injection,
+        });
       });
     });
   }
