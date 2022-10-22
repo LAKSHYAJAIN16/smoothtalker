@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   // Initialize States
   const STATES = ["main", "decode", "pickup-lines", "mws"];
-  let scroll = false;
 
   // Get the JSON
   fetch("/lines.json").then((response) => console.log(response.body));
@@ -25,12 +24,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function monitorWhatsapp() {
+    let ableScroll = false;
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       let url = new URL(tabs[0].url);
 
       if (url.host !== "web.whatsapp.com") {
         alert("You are not on WhatsApp");
       } else {
+        //Inject script to listen for key inputs (mostly for the scroll)
+        chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id, allFrames: true },
+          function: keyInputs,
+        });
       }
     });
 
@@ -84,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               // console.log(label);
               if (label === null || undefined) {
                 //Nothing. Standard Whatsapp
-                console.log("Standard Whatsapp Detected");
+                // console.log("Standard Whatsapp Detected");
                 continue;
               } else {
                 //Sometimes the label might contain the convo name, for direct messages
@@ -93,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   continue;
                 } else {
                   // ABORT ABORT
-                  console.log("MSG by User DETECTED");
+                  // console.log("MSG by User DETECTED");
                   isYou = true;
                   break;
                 }
@@ -123,7 +128,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         } catch (err) {
           // Our Message, so don't do anything
-          console.log(err);
+          // console.log(err);
         }
       }
 
@@ -198,6 +203,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       setTimeout(injection, 3000);
     }
 
+    function keyInputs() {
+      function scroll() {
+        console.log("scrolling");
+        window.scrollBy(0, -10000);
+        if (ableScroll === true) {
+          setTimeout(scroll, 1000);
+        } else if (ableScroll === false) {
+          // End Loop
+        }
+      }
+      window.addEventListener("keydown", (e) => {
+        console.log(e.key);
+        if (e.key === "q") {
+          //Start Scroll
+          ableScroll = true;
+          scroll();
+        } else if (e.key === "z") {
+          //End Scroll
+          ableScroll = false;
+        }
+      });
+    }
+
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id, allFrames: true },
@@ -210,16 +238,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     //Get JSON data
     const data = localStorage.getItem("mws");
     saveTextAs(data, "all_whatsapp_messages.json");
-  }
-
-  function mwsScrollUp(){
-    window.scrollBy(0, -100);
-    if(scroll === true){
-      setTimeout(mwsScrollUp, 1000);
-    }
-    else if(scroll === false){
-      // Stop Timeout loop
-    }
   }
 
   function generateRandomPickupLine() {
@@ -241,16 +259,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("mws-export").addEventListener("click", () => {
     saveMWSData();
-  });
-
-  document.getElementById("mws-scrollUp").addEventListener("keydown", (e) => {
-    if(e.key === "q"){
-      scroll = true;
-      mwsScrollUp();
-    }
-    else if(e.key === "z"){
-      scroll = false;
-    }
   });
 
   document.getElementById("decode-fn").addEventListener("click", () => {
