@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   // Initialize States
   const STATES = ["main", "decode", "pickup-lines", "mws"];
+  let scroll = false;
 
   // Get the JSON
   fetch("/lines.json").then((response) => console.log(response.body));
@@ -38,10 +39,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (request.action == "getSource") {
         // this.pageSource = request.source;
         const html = request.source;
+
+        //Update Iters
         iters += 1;
+
+        //Write to Output
         document.getElementById("mws-iters").innerText = `Iters : ${iters}`;
         document.getElementById("mws-content").innerText = html;
-        // alert(html);
+
+        //Save to localStorage
+        localStorage.setItem("mws", html);
       }
     });
 
@@ -63,25 +70,60 @@ document.addEventListener("DOMContentLoaded", async () => {
           const supPar = par.parentNode;
           const container = supPar.firstChild;
           const nameElement = container.firstChild;
-          let name = nameElement.innerText;
+          let name = nameElement.innerText || msg.innerText;
 
-          //If the name and sender are equal, take the last valid name (WhatsApp :L)
-          if (name === msg.innerText) {
-            name = lastName;
-          } else if (name !== msg.innerText) {
-            lastName = name;
+          //Check if it is our message
+          const youContainer = supPar.parentNode;
+          const spans = youContainer.childNodes;
+          let isYou = false;
+          for (let i = 0; i < spans.length; i++) {
+            const element = spans[i];
+            // Check if it is a span
+            if (element.nodeName === "SPAN") {
+              const label = element.ariaLabel;
+              // console.log(label);
+              if (label === null || undefined) {
+                //Nothing. Standard Whatsapp
+                console.log("Standard Whatsapp Detected");
+                continue;
+              } else {
+                //Sometimes the label might contain the convo name, for direct messages
+                if (label.includes(convoTitle)) {
+                  isYou = false;
+                  continue;
+                } else {
+                  // ABORT ABORT
+                  console.log("MSG by User DETECTED");
+                  isYou = true;
+                  break;
+                }
+              }
+            }
           }
 
-          //If the name is blank, we're in a direct chat, so the name will be the title
-          if (name === "") {
-            name = convoTitle;
-            lastName = convoTitle;
-          }
+          if (isYou === true) {
+            console.log("Message by User detected");
+            // Abort!
+          } else if (isYou === false) {
+            //If the name and sender are equal, take the last valid name (WhatsApp :L)
+            if (name === msg.innerText) {
+              name = lastName;
+            } else if (name !== msg.innerText) {
+              lastName = name;
+            }
 
-          //Assign each message a unique id according to the message and name
-          actMsgs.push({ sender: name, msg: msg.innerText });
+            //If the name is blank, we're in a direct chat, so the name will be the title
+            if (name === "") {
+              name = convoTitle;
+              lastName = convoTitle;
+            }
+
+            //Assign each message a unique id according to the message and name
+            actMsgs.push({ sender: name, msg: msg.innerText });
+          }
         } catch (err) {
           // Our Message, so don't do anything
+          console.log(err);
         }
       }
 
@@ -106,7 +148,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         nChat.title = chat.title;
         if (chat.title === output.title) {
-          console.log("dis got called");
+          console.log(`Updated Smoothtalker Data for ${convoTitle}`);
           //Append
           c_msgs = c_msgs.concat(output.msgs);
 
@@ -164,6 +206,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  function saveMWSData() {
+    //Get JSON data
+    const data = localStorage.getItem("mws");
+    saveTextAs(data, "all_whatsapp_messages.json");
+  }
+
+  function mwsScrollUp(){
+    window.scrollBy(0, -100);
+    if(scroll === true){
+      setTimeout(mwsScrollUp, 1000);
+    }
+    else if(scroll === false){
+      // Stop Timeout loop
+    }
+  }
+
   function generateRandomPickupLine() {
     return;
   }
@@ -179,6 +237,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("to-mws-btn").addEventListener("click", () => {
     switchUI("mws");
     monitorWhatsapp();
+  });
+
+  document.getElementById("mws-export").addEventListener("click", () => {
+    saveMWSData();
+  });
+
+  document.getElementById("mws-scrollUp").addEventListener("keydown", (e) => {
+    if(e.key === "q"){
+      scroll = true;
+      mwsScrollUp();
+    }
+    else if(e.key === "z"){
+      scroll = false;
+    }
   });
 
   document.getElementById("decode-fn").addEventListener("click", () => {

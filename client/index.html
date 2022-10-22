@@ -4,9 +4,10 @@
     <title>Smooth Talker</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/style.css" />
+    <script src="/FileSaver.js"></script>
     <script src="/main.js"></script>
   </head>
-  
+
   <body>
     <div class="main">
       <h1 class="heading">Smooth Talker</h1>
@@ -66,7 +67,13 @@
         <div class="n-flex" style="flex-direction: column">
           <p class="mws">Monitoring Whatsapp..</p>
           <h2 id="mws-iters">Iters : 0</h2>
-          <p id="mws-content" style="font-size:0.7em"></p>
+          <button class="button" id="mws-export">
+            Export Data to JSON File
+          </button>
+          <button class="button" id="mws-scrollUp">
+            Scroll Up (press z)
+          </button>
+          <p id="mws-content" style="font-size: 0.7em"></p>
         </div>
       </div>
     </div>
