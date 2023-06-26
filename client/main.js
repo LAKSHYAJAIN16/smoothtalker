@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       function injection() {
+        console.log("ran");
         //Get Title of Conversation
         const convoTitle = document.querySelector("._21nHd").innerText;
 
@@ -197,10 +198,84 @@ document.addEventListener("DOMContentLoaded", async () => {
         setTimeout(injection, 3000);
       }
 
+      function new_injection() {
+        function click(e) {
+          console.log("clicked!");
+
+          // Get text
+          const text = e.target.parentElement.firstChild.innerHTML;
+          console.log(text);
+          e.target.innerText = "Loading....";
+
+          const body = `
+          {
+            "model": "gpt-3.5-turbo-0301",
+            "messages": [
+              {
+                "role": "user",
+                "content": "Write the most attractive, funny reply you can think of. The text message is : ${text}"
+              }
+            ]
+          }
+          `;
+          console.log(body);
+
+          fetch("https://api.pawan.krd/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Accept: "application.json",
+              "Content-Type": "application/json",
+              Authorization:
+                "Bearer pk-fGjhLJPkXQtwLeVHIcBZtfwjTIpCoUoDYwPMaIEsqDJUyPSK",
+            },
+            body: body,
+            cache: "default",
+          })
+            .then((e) => {
+              return e.json();
+            })
+            .then((f) => {
+              console.log(f);
+              const txt = f.choices[0].message.content;
+              console.log(txt);
+              e.target.innerHTML = `<span style='color: gold'>${txt}</span>`;
+            });
+        }
+
+        console.log("les go");
+        const boiz = document.getElementsByClassName("_21Ahp");
+        for (let i = 0; i < boiz.length; i++) {
+          const boi = boiz[i];
+
+          // get our span
+          const spans = boi.children;
+          for (let k = 0; k < spans.length; k++) {
+            const element = spans[k];
+            if (
+              element.innerText !== null &&
+              element.innerText !== "" &&
+              element.innerText !== undefined
+            ) {
+              // It's our boi!
+              if (element.innerHTML.includes("button")) {
+                break;
+              } else {
+                element.onclick = click;
+                element.innerHTML = `<span>${element.innerText}</span><br><br><button style="font-size : 15px; border-radius : 25px; padding-left : 10px; padding-right : 10px;
+                padding-top : 5px; padding-bottom : 5px; background-color : lightblue;">generate smooth reply</button>`;
+              }
+            }
+          }
+        }
+
+        //Repeat every 3 seconds for new messages
+        setTimeout(new_injection, 3000);
+      }
+
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.scripting.executeScript({
           target: { tabId: tabs[0].id, allFrames: true },
-          function: injection,
+          function: new_injection,
         });
       });
     });
