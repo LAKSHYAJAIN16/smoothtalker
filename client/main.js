@@ -204,6 +204,40 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           // Get text
           const text = e.target.parentElement.firstChild.innerHTML;
+          console.log(e.target.parentElement);
+          console.log(text);
+          e.target.parentElement.onclick = function () {};
+          e.target.onclick = function () {};
+
+          e.target.parentElement.innerHTML = `<span>${text}</span><br><br><button style="border-radius : 25px; padding-left : 3px; padding-right : 3px;
+          padding-top : 3px; padding-bottom : 3px; background-color : lightblue;"><div style="display : flex; align-items : center;"><span style="font-size : 20px;" id="exit">😉 </span><span style="font-size : 12px; font-weight : bold" id="ana">Analyse Text</span> <span> </span> <span style="font-size : 12px; font-weight : bold" id="gsr">Generate Smooth Response</span> <span> </span> <span style="font-size : 15px; color : grey;" id="exit-2">x</span></button>`;
+
+          // Attach Exit event listeners
+          document.getElementById("exit").onclick = function (e) {
+            e.target.parentElement.innerHTML = `<br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
+            padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
+            console.log("got called!");
+            e.target.parentElement.firstChild.onclick = click;
+          };
+          document.getElementById("exit-2").onclick = function (e) {
+            e.target.parentElement.innerHTML = `<br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
+            padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
+            e.target.parentElement.firstChild.onclick = click;
+          };
+
+          // Attach a_click and m_click
+          // document.getElementById("gsr").onclick = function (e) {
+          //   a_click(e);
+          // };
+        }
+
+        // Actual ChatGPT
+        function a_click(e) {
+          console.log("clicked!");
+
+          // Get text
+          const text =
+            e.target.parentElement.parentElement.firstChild.innerHTML;
           console.log(text);
           e.target.innerText = "Loading....";
 
@@ -242,7 +276,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         }
 
-        console.log("les go");
+        // console.log("les go");
         const boiz = document.getElementsByClassName("_21Ahp");
         for (let i = 0; i < boiz.length; i++) {
           const boi = boiz[i];
@@ -261,8 +295,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 break;
               } else {
                 element.onclick = click;
-                element.innerHTML = `<span>${element.innerText}</span><br><br><button style="font-size : 15px; border-radius : 25px; padding-left : 10px; padding-right : 10px;
-                padding-top : 5px; padding-bottom : 5px; background-color : lightblue;">generate smooth reply</button>`;
+                element.innerHTML = `<span>${element.innerText}</span><br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
+                padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
               }
             }
           }
