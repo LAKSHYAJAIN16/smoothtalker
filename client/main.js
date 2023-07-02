@@ -17,6 +17,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  document.getElementById('my-select').addEventListener('change', function() {
+    console.log('You selected: ', this.value);
+    localStorage.setItem("f", this.value);
+  });
+
+  // Set the default value for the select
+  const f = localStorage.getItem("f") || "Teenage (mixed)"
+  const children = document.getElementById("my-select").children;
+  for (let id = 0; id < children.length; id++) {
+    const child = children[id];
+    if(child.innerText === f){
+      child.selected = true;
+      break;
+    }
+  }
+  
   function decode() {
     const val = document.getElementById("decodeInput").innerText;
 
@@ -199,62 +215,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       function new_injection() {
-        function click(e) {
-          console.log("clicked!");
-
-          // Get text
-          const text = e.target.parentElement.firstChild.innerHTML;
-          console.log(e.target.parentElement);
-          console.log(text);
-          e.target.parentElement.onclick = function () {};
-          e.target.onclick = function () {};
-
-          e.target.parentElement.innerHTML = `<span>${text}</span><br><br><button style="border-radius : 25px; padding-left : 3px; padding-right : 3px;
-          padding-top : 3px; padding-bottom : 3px; background-color : lightblue;"><div style="display : flex; align-items : center;"><span style="font-size : 20px;" id="exit">😉 </span><span style="font-size : 12px; font-weight : bold" id="ana">Analyse Text</span> <span> </span> <span style="font-size : 12px; font-weight : bold" id="gsr">Generate Smooth Response</span> <span> </span> <span style="font-size : 15px; color : grey;" id="exit-2">x</span></button>`;
-
-          // Attach Exit event listeners
-          document.getElementById("exit").onclick = function (e) {
-            e.target.parentElement.innerHTML = `<br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
-            padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
-            console.log("got called!");
-            e.target.parentElement.firstChild.onclick = click;
-          };
-          document.getElementById("exit-2").onclick = function (e) {
-            e.target.parentElement.innerHTML = `<br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
-            padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
-            e.target.parentElement.firstChild.onclick = click;
-          };
-
-          // Attach a_click and m_click
-          // document.getElementById("gsr").onclick = function (e) {
-          //   a_click(e);
-          // };
-        }
-
         // Actual ChatGPT
         function a_click(e) {
           console.log("clicked!");
 
           // Get text
-          const text =
-            e.target.parentElement.parentElement.firstChild.innerHTML;
+          const text = e.target.parentElement.firstChild.innerHTML;
           console.log(text);
-          e.target.innerText = "Loading....";
+          // e.target.parentElement.parentElement.parentElement.innerHTML = "<span id='pasta'>Loading....</span>";
 
           const body = `
           {
             "model": "gpt-3.5-turbo-0301",
-            "messages": [
-              {
-                "role": "user",
-                "content": "Write the most attractive, funny reply you can think of. The text message is : ${text}"
-              }
-            ]
+            "prompt": "Write the most attractive, funny reply you can think of. The text message is : ${text}"
           }
           `;
           console.log(body);
 
-          fetch("https://api.pawan.krd/v1/chat/completions", {
+          fetch("https://api.pawan.krd/v1/completions", {
             method: "POST",
             headers: {
               Accept: "application.json",
@@ -270,9 +248,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             })
             .then((f) => {
               console.log(f);
-              const txt = f.choices[0].message.content;
+              const txt = f.choices[0].text;
               console.log(txt);
-              e.target.innerHTML = `<span style='color: gold'>${txt}</span>`;
+              e.target.parentElement.innerHTML = `<span>${text}</span><span style='color: #bf0407; font-weight : bold;'>${txt}</span><br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
+              padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
             });
         }
 
@@ -294,7 +273,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               if (element.innerHTML.includes("button")) {
                 break;
               } else {
-                element.onclick = click;
+                element.onclick = a_click;
                 element.innerHTML = `<span>${element.innerText}</span><br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
                 padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
               }
