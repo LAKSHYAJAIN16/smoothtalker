@@ -17,22 +17,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  document.getElementById('my-select').addEventListener('change', function() {
-    console.log('You selected: ', this.value);
+  document.getElementById("my-select").addEventListener("change", function () {
+    console.log("You selected: ", this.value);
     localStorage.setItem("f", this.value);
   });
 
   // Set the default value for the select
-  const f = localStorage.getItem("f") || "Teenage (mixed)"
+  const f = localStorage.getItem("f") || "Teenage (mixed)";
   const children = document.getElementById("my-select").children;
   for (let id = 0; id < children.length; id++) {
     const child = children[id];
-    if(child.innerText === f){
+    if (child.innerText === f) {
       child.selected = true;
       break;
     }
   }
-  
+
   function decode() {
     const val = document.getElementById("decodeInput").innerText;
 
@@ -225,30 +225,36 @@ document.addEventListener("DOMContentLoaded", async () => {
           // e.target.parentElement.parentElement.parentElement.innerHTML = "<span id='pasta'>Loading....</span>";
 
           const body = `
-          {
-            "model": "gpt-3.5-turbo-0301",
-            "prompt": "Write the most attractive, funny reply you can think of. The text message is : ${text}"
-          }
+            Write the most attractive, funny reply you can think of. The text message is : ${text}
           `;
           console.log(body);
 
-          fetch("https://api.pawan.krd/v1/completions", {
-            method: "POST",
-            headers: {
-              Accept: "application.json",
-              "Content-Type": "application/json",
-              Authorization:
-                "Bearer pk-fGjhLJPkXQtwLeVHIcBZtfwjTIpCoUoDYwPMaIEsqDJUyPSK",
-            },
-            body: body,
-            cache: "default",
-          })
+          fetch(`https://free-gpt-4-api.meet508.tech/?text=${body}`)
+            // Retry
+            .catch((g) => {
+              fetch(`https://free-gpt-4-api.meet508.tech/?text=${body}`, {
+                method: "GET",
+                cache: "default",
+              })
+                .then((e) => {
+                  return e.text();
+                })
+                .then((f) => {
+                  console.log(f);
+                  const txt = f.choices[0].text;
+                  console.log(txt);
+                  e.target.parentElement.innerHTML = `<span>${text}</span><span style='color: #bf0407; font-weight : bold;'>${txt}</span><br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
+              padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
+                });
+            })
+            // Get Text
             .then((e) => {
-              return e.json();
+              console.log(e);
+              return e.text();
             })
             .then((f) => {
               console.log(f);
-              const txt = f.choices[0].text;
+              const txt = f;
               console.log(txt);
               e.target.parentElement.innerHTML = `<span>${text}</span><span style='color: #bf0407; font-weight : bold;'>${txt}</span><br><br><button style="font-size : 20px; border-radius : 25px; padding-left : 3px; padding-right : 3px;
               padding-top : 3px; padding-bottom : 3px; background-color : lightblue;">😉</button>`;
