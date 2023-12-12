@@ -336,8 +336,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         //Get Title of Conversation
         const convoThings = document.querySelectorAll(
           ".x1lliihq.x193iq5w.x6ikm8r.x10wlt62.xlyipyv.xuxw1ft"
-        )
-        if(convoThings.length == 0) return;
+        );
+        if (convoThings.length == 0) return;
 
         const convoTitle = convoThings[convoThings.length - 1].innerText;
 
@@ -355,27 +355,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             //Check if it is our message
             let isYou = false;
-            if(messages[i].classList.contains("xzsf02u")){
+            if (messages[i].classList.contains("xzsf02u")) {
               isYou = false;
-            }
-            else{
+            } else {
               isYou = true;
             }
 
             // If we have something open and we're the user, close
-            if(isYou === true && actMsgs.length === 0){
+            if (isYou === true && actMsgs.length === 0) {
               // sorry
-            }
-            else{
-              if(isYou === true){
-                actMsgs[actMsgs.length - 1]["messages_us"].push(txt)
+            } else {
+              if (isYou === true) {
+                actMsgs[actMsgs.length - 1]["messages_us"].push(txt);
                 op = false;
               }
-              if(isYou === false && op === true){
-                actMsgs[actMsgs.length - 1]["messages_other"].push(txt)
+              if (isYou === false && op === true) {
+                actMsgs[actMsgs.length - 1]["messages_other"].push(txt);
               }
-              if(isYou === false && op === false){
-                actMsgs.push({messages_other : [txt], messages_us : []});
+              if (isYou === false && op === false) {
+                actMsgs.push({ messages_other: [txt], messages_us: [] });
                 op = true;
               }
             }
@@ -386,17 +384,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Persistance because.... WHY NOT?
-        const act = JSON.parse(localStorage.getItem("smoothtalker_buf_insta" || "[]")) || [];
-        const new_act = [... new Set(act.concat(actMsgs))];
+        const act =
+          JSON.parse(localStorage.getItem("smoothtalker_buf_insta" || "[]")) ||
+          [];
+        let new_act = act.concat(actMsgs);
+
+        // JSON BS because why not?
+        new_act = [...new Set(new_act)];
 
         //Create LS Output
         localStorage.setItem("smoothtalker_buf_insta", JSON.stringify(new_act));
 
         chrome.runtime.sendMessage({
           action: "getSource",
-          source: convoTitle + "->->->->->:-!" + JSON.stringify({
-            new_act
-          }),
+          source: convoTitle + "->->->->->:-!" + JSON.stringify(new_act),
         });
 
         //Repeat every 3 seconds for new messages
