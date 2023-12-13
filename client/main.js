@@ -327,12 +327,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           document.getElementById("minsta-content").innerHTML = xs[1];
 
           //Save to localStorage
-          // document.getElementById("minsta").innerText = ("Monitoring Chat with " + xs[0] + " .....");
           localStorage.setItem("minsta", html);
+          document.getElementById("minsta-BIT").innerText = ("Monitoring Chat with " + xs[0]);
         }
       });
 
       function injection() {
+        function removeDuplicates(data, key) {
+          return [...new Map(data.map((x) => [key(x), x])).values()];
+        }
+
         //Get Title of Conversation
         const convoThings = document.querySelectorAll(
           ".x1lliihq.x193iq5w.x6ikm8r.x10wlt62.xlyipyv.xuxw1ft"
@@ -366,14 +370,14 @@ document.addEventListener("DOMContentLoaded", async () => {
               // sorry
             } else {
               if (isYou === true) {
-                actMsgs[actMsgs.length - 1]["messages_us"].push(txt);
+                actMsgs[actMsgs.length - 1].push("US~~:"+txt)
                 op = false;
               }
               if (isYou === false && op === true) {
-                actMsgs[actMsgs.length - 1]["messages_other"].push(txt);
+                actMsgs[actMsgs.length - 1].push("OTHER_PERSON~~:" + txt);
               }
               if (isYou === false && op === false) {
-                actMsgs.push({ messages_other: [txt], messages_us: [] });
+                actMsgs.push(["OTHER_PERSON~~:" + txt]);
                 op = true;
               }
             }
@@ -383,14 +387,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         }
 
-        // Persistance because.... WHY NOT?
-        const act =
-          JSON.parse(localStorage.getItem("smoothtalker_buf_insta" || "[]")) ||
-          [];
+        const act = JSON.parse(
+          localStorage.getItem("smoothtalker_buf_insta") || "[]"
+        );
         let new_act = act.concat(actMsgs);
-
-        // JSON BS because why not?
-        new_act = [...new Set(new_act)];
+        new_act = Array.from(new Set(new_act.map(JSON.stringify)), JSON.parse);
 
         //Create LS Output
         localStorage.setItem("smoothtalker_buf_insta", JSON.stringify(new_act));
@@ -419,6 +420,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveTextAs(data, "all_whatsapp_messages.json");
   }
 
+  function saveInstaData() {
+    //Get JSON data
+    const data = localStorage.getItem("minsta");
+    saveTextAs(data, "all_insta_messages.json");
+  }
+
   function generateRandomPickupLine() {
     return;
   }
@@ -444,6 +451,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("mws-export").addEventListener("click", () => {
     saveMWSData();
   });
+
+  document.getElementById("minsta-export").addEventListener("click", () => {
+    saveInstaData();
+  });
+
+  document.getElementById("minsta-delete").addEventListener("click", () => {
+    localStorage.clear();
+  })
 
   document.getElementById("decode-fn").addEventListener("click", () => {
     decode();
