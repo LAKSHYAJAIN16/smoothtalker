@@ -33,15 +33,16 @@ def convert_to_prompt(array):
             output += ". "
               
     prompt = prompt_starter.format(inp, output)   
-    return prompt
+    return [inp, output, prompt]
 
 # Loop through each thing
-m = 0
+l = 0
 for k in content:
     # Compile prompt
-    prompts.append(convert_to_prompt(k))
-    m+=1
-    print(m)
+    l += 1
+    print(l)
+    m = convert_to_prompt(k)
+    prompts.append({"her":m[0],"him":m[1],"prompt":m[2]})
     
 json.dump(prompts, open("prompts.json", "w"))
     
