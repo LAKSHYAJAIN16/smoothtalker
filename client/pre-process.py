@@ -42,6 +42,8 @@ for k in content:
     l += 1
     print(l)
     m = convert_to_prompt(k)
+    
+    # Hello?
     prompts.append({"her":m[0],"him":m[1],"prompt":m[2]})
     
 json.dump(prompts, open("prompts.json", "w"))
