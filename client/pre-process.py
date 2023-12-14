@@ -12,13 +12,14 @@ prompts = []
 # To convert array to prompt:
 def convert_to_prompt(array):
     prompt_starter = """# Task
-    This is a conversation between a male and a female teenager on Instagram. The Male is trying to court the female and be as attractive as possible. You will be given the texts of the female and you need to generate the texts of the male.
+    This is a conversation between a male and a female teenager on Instagram. You will be given the texts of the female and need to generate the texts of the male.
     
     # Input
     {0}
     
     # Output
     {1}
+    ~~~~~~~~~~~~~~~~~~~~
     """
     inp = """Her : """
     output="""Him : """
