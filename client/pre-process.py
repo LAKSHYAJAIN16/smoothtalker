@@ -1,6 +1,6 @@
 import json
 
-FILE_PATH = r"C:\Users\USER\Projects\lj-llm\smoothtalker\all_insta_messages (14).json"
+FILE_PATH = r"C:\Users\USER\Projects\lj-llm\smoothtalker\all_insta_messages (13).json"
 
 # Scrape Content
 f = open(FILE_PATH, "r+", encoding="UTF8")
