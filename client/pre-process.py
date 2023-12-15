@@ -11,13 +11,12 @@ prompts = []
 
 # To convert array to prompt:
 def convert_to_prompt(array):
-    prompt_starter = """
-    # Task
-    You will be given the texts of the female and need to generate the texts of the male. 
-    # Input
-    {0}
-    # Output
-    {1}
+    prompt_starter = """# Task
+You will be given the texts of the female and need to generate the texts of the male. 
+# Input
+{0}
+# Output
+{1}
     /!/
     """
     inp = """Her : """
