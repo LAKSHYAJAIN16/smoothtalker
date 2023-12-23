@@ -7,11 +7,11 @@ client = OpenAI(
     api_key="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",
 )
 
-data = json.load(open(r"smoothtalker/prompts.json","r+"))
+data = json.load(open(r"C:\Users\USER\Projects\lj-llm\smoothtalker\client\prompts.json","r+"))
 
 # VERY CAREFUL : CUTOFF
-cutoff = 100
-start = 5
+cutoff = 200
+start = 100
 total_cost = 0
 
 for i in range(start,cutoff):
@@ -44,6 +44,7 @@ for i in range(start,cutoff):
     
     The 5 Conversations must have unique messages for her and him. The prompt for 'her' must be different everytime.
                 """.format(data[i]["her"],data[i]["him"])
+                
     chat_completion = client.chat.completions.create(
         messages=[
             {
