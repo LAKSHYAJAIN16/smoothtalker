@@ -1,6 +1,6 @@
 import json
 
-FILE_PATH = r"C:\Users\USER\Projects\lj-llm\smoothtalker\all_insta_messages (13).json"
+FILE_PATH = r"C:\Users\USER\Desktop\all_insta_messages (3).json"
 
 # Scrape Content
 f = open(FILE_PATH, "r+", encoding="UTF8")
@@ -48,5 +48,5 @@ for k in content:
     # Hello?
     prompts.append({"her":m[0],"him":m[1],"prompt":m[2]})
     
-json.dump(prompts, open("prompts.json", "w"))
+json.dump(prompts, open("prompts_2.json", "w"))
     
